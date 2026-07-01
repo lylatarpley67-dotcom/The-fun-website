@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+  <title>The Fun Website</title>
+
+  <style>
+
+    body {
+
+      background: skyblue;
+
+      font-family: Comic Sans MS, Arial, sans-serif;
+
+      text-align: center;
+
+      padding: 20px;
+
+    }
+
+    h1 {
+
+      color: darkblue;
+
+    }
+
+    .box {
+
+      background: white;
+
+      padding: 20px;
+
+      border-radius: 20px;
+
+      margin: 20px auto;
+
+      max-width: 600px;
+
+    }
+
+    button {
+
+      font-size: 18px;
+
+      padding: 10px 18px;
+
+      background: gold;
+
+      border: none;
+
+      border-radius: 10px;
+
+      cursor: pointer;
+
+      margin: 5px;
+
+    }
+
+    button:hover {
+
+      background: orange;
+
+    }
+
+    input {
+
+      font-size: 18px;
+
+      padding: 8px;
+
+      border-radius: 8px;
+
+    }
+
+    .card {
+
+      font-size: 30px;
+
+      width: 70px;
+
+      height: 70px;
+
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+<h1>🎉 Welcome to The Fun Website! 🎉</h1>
+
+<div class="box">
+
+  <h2>😂 Fun Page</h2>
+
+  <p id="funBox">Click Next Page to start!</p>
+
+  <button onclick="nextPage()">Next Page</button>
+
+</div>
+
+<div class="box">
+
+  <h2>🎯 Guess the Number</h2>
+
+  <p>Guess a number from 1 to 10!</p>
+
+  <input id="guessInput" type="number">
+
+  <button onclick="checkGuess()">Guess</button>
+
+  <p id="guessResult"></p>
+
+</div>
+
+<div class="box">
+
+  <h2>🪨 Rock Paper Scissors</h2>
+
+  <button onclick="playRPS('rock')">Rock</button>
+
+  <button onclick="playRPS('paper')">Paper</button>
+
+  <button onclick="playRPS('scissors')">Scissors</button>
+
+  <p id="rpsResult"></p>
+
+</div>
+
+<div class="box">
+
+  <h2>🧠 Memory Game</h2>
+
+  <p>Click two cards and try to match them!</p>
+
+  <div id="memoryGame"></div>
+
+  <p id="memoryResult"></p>
+
+</div>
+
+<div class="box">
+
+  <h2>⏱️ 30 Second Clicker Game</h2>
+
+  <p>Click as many times as you can!</p>
+
+  <p>Time: <span id="time">30</span></p>
+
+  <p>Score: <span id="score">0</span></p>
+
+  <button onclick="startClicker()">Start</button>
+
+  <button onclick="clickPoint()">Click Me!</button>
+
+</div>
+
+<script>
+
+var pages = [
+
+  "😂 Joke time! Why did the cookie go to the doctor? Because it felt crummy!",
+
+  "🐘 Animal fact time! Octopuses have three hearts!",
+
+  "🎲 Random activity time! Build a pillow fort!",
+
+  "😂 Joke time! What do you call a sleeping bull? A bulldozer!",
+
+  "🐄 Animal fact time! Cows have best friends!",
+
+  "🎲 Random activity time! Draw your favorite animal!"
+
+];
+
+var pageNumber = 0;
+
+function nextPage() {
+
+  document.getElementById("funBox").innerHTML = pages[pageNumber];
+
+  pageNumber++;
+
+  if (pageNumber >= pages.length) {
+
+    pageNumber = 0;
+
+  }
+
+}
+
+// Guess the Number
+
+var secretNumber = Math.floor(Math.random() * 10) + 1;
+
+function checkGuess() {
+
+  var guess = document.getElementById("guessInput").value;
+
+  if (guess == secretNumber) {
+
+    document.getElementById("guessResult").innerHTML = "🎉 You got it!";
+
+    secretNumber = Math.floor(Math.random() * 10) + 1;
+
+  } else {
+
+    document.getElementById("guessResult").innerHTML = "Try again!";
+
+  }
+
+}
+
+// Rock Paper Scissors
+
+function playRPS(player) {
+
+  var choices = ["rock", "paper", "scissors"];
+
+  var computer = choices[Math.floor(Math.random() * choices.length)];
+
+  var result = "You picked " + player + ". Computer picked " + computer + ". ";
+
+  if (player == computer) {
+
+    result += "It's a tie!";
+
+  } else if (
+
+    (player == "rock" && computer == "scissors") ||
+
+    (player == "paper" && computer == "rock") ||
+
+    (player == "scissors" && computer == "paper")
+
+  ) {
+
+    result += "You win! 🎉";
+
+  } else {
+
+    result += "Computer wins!";
+
+  }
+
+  document.getElementById("rpsResult").innerHTML = result;
+
+}
+
+// Memory Game
+
+var cards = ["🐶", "🐶", "🐱", "🐱", "🐸", "🐸", "🦁", "🦁"];
+
+cards.sort(function() { return 0.5 - Math.random(); });
+
+var firstCard = null;
+
+var secondCard = null;
+
+function makeMemoryGame() {
+
+  var game = document.getElementById("memoryGame");
+
+  game.innerHTML = "";
+
+  for (let i = 0; i < cards.length; i++) {
+
+    var button = document.createElement("button");
+
+    button.className = "card";
+
+    button.innerHTML = "❓";
+
+    button.onclick = function() {
+
+      flipCard(button, i);
+
+    };
+
+    game.appendChild(button);
+
+  }
+
+}
+
+function flipCard(button, index) {
+
+  if (button.innerHTML != "❓") {
+
+    return;
+
+  }
+
+  button.innerHTML = cards[index];
+
+  if (firstCard == null) {
+
+    firstCard = button;
+
+  } else {
+
+    secondCard = button;
+
+    if (firstCard.innerHTML == secondCard.innerHTML) {
+
+      document.getElementById("memoryResult").innerHTML = "Match! 🎉";
+
+      firstCard = null;
+
+      secondCard = null;
+
+    } else {
+
+      document.getElementById("memoryResult").innerHTML = "Not a match!";
+
+      setTimeout(function() {
+
+        firstCard.innerHTML = "❓";
+
+        secondCard.innerHTML = "❓";
+
+        firstCard = null;
+
+        secondCard = null;
+
+      }, 800);
+
+    }
+
+  }
+
+}
+
+makeMemoryGame();
+
+// Clicker Game
+
+var score = 0;
+
+var timeLeft = 30;
+
+var gameStarted = false;
+
+var timer;
+
+function startClicker() {
+
+  score = 0;
+
+  timeLeft = 30;
+
+  gameStarted = true;
+
+  document.getElementById("score").innerHTML = score;
+
+  document.getElementById("time").innerHTML = timeLeft;
+
+  clearInterval(timer);
+
+  timer = setInterval(function() {
+
+    timeLeft--;
+
+    document.getElementById("time").innerHTML = timeLeft;
+
+    if (timeLeft <= 0) {
+
+      clearInterval(timer);
+
+      gameStarted = false;
+
+      alert("Time is up! Your score was " + score + "!");
+
+    }
+
+  }, 1000);
+
+}
+
+function clickPoint() {
+
+  if (gameStarted == true) {
+
+    score++;
+
+    document.getElementById("score").innerHTML = score;
+
+  }
+
+}
+
+</script>
+
+</body>
+
+</html>
